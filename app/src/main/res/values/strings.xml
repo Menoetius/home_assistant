@@ -9,4 +9,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+
+    //navigation strings
+    <string name="nav_home">Home</string>
+    <string name="nav_logs">Logs</string>
+    <string name="nav_security">Alarm</string>
+    <string name="nav_temperature">Heater</string>
+    <string name="nav_settings">Settings</string>
 </resources>

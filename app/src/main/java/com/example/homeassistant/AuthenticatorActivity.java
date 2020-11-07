@@ -2,7 +2,9 @@ package com.example.homeassistant;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accounts.AccountManager;
 import android.os.Bundle;
+import android.widget.EditText;
 
 public class AuthenticatorActivity extends AppCompatActivity {
 
@@ -11,9 +13,13 @@ public class AuthenticatorActivity extends AppCompatActivity {
     public final static String ARG_ACCOUNT_NAME = "ACCOUNT_NAME";
     public final static String ARG_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT";
 
-    public static final String KEY_ERROR_MESSAGE = "ERR_MSG";
+    private AccountManager mAccountManager;
 
-    public final static String PARAM_USER_PASS = "USER_PASS";
+    private String login;
+    private String password;
+
+    private EditText etLogin;
+    private EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
