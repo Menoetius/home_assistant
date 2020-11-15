@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/HomeFragment"
         android:icon="@drawable/ic_home"
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/nav_logs"
+        android:id="@+id/LogsFragment"
         android:icon="@drawable/ic_logs"
         android:title="@string/nav_logs" />
 
     <item
-        android:id="@+id/nav_security"
+        android:id="@+id/SecurityFragment"
         android:icon="@drawable/ic_security"
         android:title="@string/nav_security" />
 
-
     <item
-        android:id="@+id/nav_temperature"
+        android:id="@+id/TemperatureFragment"
         android:icon="@drawable/ic_temperature"
         android:title="@string/nav_temperature" />
 
     <item
-        android:id="@+id/nav_settings"
+        android:id="@+id/SettingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="@string/nav_settings" />
 </menu>

@@ -9,20 +9,47 @@
         android:id="@+id/HomeFragment"
         android:name="com.example.homeassistant.HomeFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/LogsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/LogsFragment"
         android:name="com.example.homeassistant.LogsFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_logs">
+        tools:layout="@layout/fragment_logs" />
+
+    <fragment
+        android:id="@+id/SecurityFragment"
+        android:name="com.example.homeassistant.SecurityFragment"
+        android:label="SecurityFragment"
+        tools:layout="@layout/fragment_security" />
+    <fragment
+        android:id="@+id/TemperatureFragment"
+        android:name="com.example.homeassistant.TemperatureFragment"
+        android:label="TemperatureFragment"
+        tools:layout="@layout/fragment_temperature" />
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.example.homeassistant.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.homeassistant.FirstFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.example.homeassistant.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/HomeFragment" />
+            app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>

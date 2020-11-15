@@ -8,5 +8,10 @@
     android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
     app:popupTheme="@style/Theme.AppCompat.Light">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/toolbar_title" />
 
 </androidx.appcompat.widget.Toolbar>

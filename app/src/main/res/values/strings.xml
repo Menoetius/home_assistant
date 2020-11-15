@@ -17,4 +17,23 @@
     <string name="nav_security">Alarm</string>
     <string name="nav_temperature">Heater</string>
     <string name="nav_settings">Settings</string>
+
+    //home fragment
+    <string name="activivies">Activities</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    //settings fragment
+    <string name="devices">Devices</string>
+    <string name="family">Family</string>
+    <string name="presets">Presets</string>
+    <string name="title_activity_devices">DevicesActivity</string>
+
+    //add device activity
+    <string name="addDeviceTitle">Add device</string>
+    <string name="send">Send</string>
+    <string name="device_type">Device type</string>
+    <string name="activation_code">Activation code</string>
+    <string name="device_id">Device ID</string>
 </resources>

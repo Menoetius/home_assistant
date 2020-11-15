@@ -1,15 +1,20 @@
 package com.example.homeassistant;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-public class LogsFragment extends Fragment {
+public class TemperatureFragment extends Fragment {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(
@@ -17,6 +22,6 @@ public class LogsFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_logs, container, false);
+        return inflater.inflate(R.layout.fragment_temperature, container, false);
     }
 }
