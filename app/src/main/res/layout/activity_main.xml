@@ -19,5 +19,6 @@
         android:layout_gravity="bottom|end"
         android:background="@color/navBackground"
         app:menu="@menu/bottom_navigation"
+        app:labelVisibilityMode="unlabeled"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

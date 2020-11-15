@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements MainActivity.DataFromActivityToFragment {
+    TextView dataReceived;
 
     @Override
     public View onCreateView(
@@ -20,11 +21,17 @@ public class HomeFragment extends Fragment {
     ) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        dataReceived = (TextView)view.findViewById(R.id.dataRecieved);
+//        textView.setText(strtext);
 
-//        Toolbar toolbarTop = view.findViewById(R.id.toolbar);
-//        TextView mTitle = (TextView) toolbarTop.findViewById(R.id.toolbar_title);
-//        mTitle.setText("Home fragment");
 
         return view;
+    }
+
+    @Override
+    public void sendData(String data) {
+        if (data != null) {
+            dataReceived.setText(data);
+        }
     }
 }

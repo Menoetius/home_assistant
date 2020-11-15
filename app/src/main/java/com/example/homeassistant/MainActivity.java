@@ -2,6 +2,7 @@ package com.example.homeassistant;
 
 import android.os.Bundle;
 
+import com.example.homeassistant.helpers.MqttHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -11,19 +12,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MainActivity extends AppCompatActivity{
-    MqttAndroidClient client;
+    MqttHelper mqttHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,33 +39,38 @@ public class MainActivity extends AppCompatActivity{
 
         setUpNavigation();
 
-        // MQTT paho
-        String clientId = MqttClient.generateClientId();
-        client = new MqttAndroidClient(this.getApplicationContext(), "tcp://broker.hivemq.com:1883", clientId);
-        MqttConnectOptions options = new MqttConnectOptions();
-
-        options.setUserName("USERNAME");
-        options.setPassword("PASSWORD".toCharArray());
-
-
-        try {
-            IMqttToken token = client.connect(options);
-            token.setActionCallback(new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Toast.makeText(MainActivity.this, "Success mqtt connect", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Toast.makeText(MainActivity.this, "Connect failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (
-                MqttException e) {
-            e.printStackTrace();
-        }
+        startMqtt();
     }
+
+    private void startMqtt(){
+        mqttHelper = new MqttHelper(getApplicationContext());
+        mqttHelper.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean b, String s) {
+                Bundle bundle = new Bundle();
+                bundle.putString("response", s);
+                // set Fragmentclass Arguments
+                HomeFragment fragobj = new HomeFragment();
+                fragobj.setArguments(bundle);
+            }
+
+            @Override
+            public void connectionLost(Throwable throwable) {
+
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+                Log.w("Mqtt", "ja toto je message " + topic.toString() + " "  + mqttMessage.toString());
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+            }
+        });
+    }
+
 
     public void setUpNavigation() {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -68,5 +78,7 @@ public class MainActivity extends AppCompatActivity{
         NavigationUI.setupWithNavController(bottomNav, navHostFragment.getNavController());
     }
 
-
+    public interface DataFromActivityToFragment {
+        void sendData(String data);
+    }
 }
