@@ -29,6 +29,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MainActivity extends AppCompatActivity{
     MqttHelper mqttHelper;
+    public Double currentTemperature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,46 +40,45 @@ public class MainActivity extends AppCompatActivity{
 
         setUpNavigation();
 
-        startMqtt();
+//        startMqtt();
     }
 
-    private void startMqtt(){
-        mqttHelper = new MqttHelper(getApplicationContext());
-        mqttHelper.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean b, String s) {
-                Bundle bundle = new Bundle();
-                bundle.putString("response", s);
-                // set Fragmentclass Arguments
-                HomeFragment fragobj = new HomeFragment();
-                fragobj.setArguments(bundle);
-            }
-
-            @Override
-            public void connectionLost(Throwable throwable) {
-
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-                Log.w("Mqtt", "ja toto je message " + topic.toString() + " "  + mqttMessage.toString());
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-
-            }
-        });
-    }
+//    private void startMqtt(){
+//        mqttHelper = new MqttHelper(getApplicationContext());
+//        mqttHelper.setCallback(new MqttCallbackExtended() {
+//            @Override
+//            public void connectComplete(boolean b, String s) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("response", s);
+//                // set Fragmentclass Arguments
+//                HomeFragment fragobj = new HomeFragment();
+//                fragobj.setArguments(bundle);
+//            }
+//
+//            @Override
+//            public void connectionLost(Throwable throwable) {
+//
+//            }
+//
+//            @Override
+//            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+//                Log.w("Mqtt", "ja toto je message " + topic.toString() + " "  + mqttMessage.toString());
+//                if (topic.equals("sensor/temperature_fahrenheit")) {
+//                    currentTemperature = Double.parseDouble(mqttMessage.toString());
+//                }
+//            }
+//
+//            @Override
+//            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+//
+//            }
+//        });
+//    }
 
 
     public void setUpNavigation() {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNav, navHostFragment.getNavController());
-    }
-
-    public interface DataFromActivityToFragment {
-        void sendData(String data);
     }
 }
