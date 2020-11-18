@@ -16,6 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -26,7 +27,7 @@ import java.security.cert.CertificateException;
 public class MqttHelper {
     public MqttAndroidClient mqttAndroidClient;
 
-    //    final String serverUri = "tcp://broker.hivemq.com:1883";
+//        final String serverUri = "tcp://broker.hivemq.com:1883";
     final String serverUri = "ssl://192.168.42.172:8883";
 
     final String clientId = MqttClient.generateClientId();
@@ -81,6 +82,20 @@ public class MqttHelper {
         try {
             socketFactoryOptions.withCaInputStream(context.getResources().openRawResource(R.raw.ca));
             mqttConnectOptions.setSocketFactory(new SocketFactory(socketFactoryOptions));
+
+
+
+//            InputStream inputStream = context.getResources().openRawResource(R.raw.ca);
+//            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+//            keyStore.load(inputStream, null);
+//
+//            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+//            trustManagerFactory.init(keyStore);
+//
+//            SSLContext sslContext = SSLContext.getInstance("TLS");
+//            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+//
+//            mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());
         } catch (IOException | NoSuchAlgorithmException | KeyStoreException | CertificateException | KeyManagementException | UnrecoverableKeyException e) {
             e.printStackTrace();
         }
@@ -105,7 +120,6 @@ public class MqttHelper {
                     Log.w("Mqtt", "Failed to connect to: " + serverUri + "\n" + exception.toString());
                 }
             });
-
 
         } catch (MqttException ex) {
             ex.printStackTrace();

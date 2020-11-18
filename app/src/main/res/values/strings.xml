@@ -38,6 +38,8 @@
     <string name="device_id">Device ID</string>
 
 
+
+
     <string name="connection_connected_to">Connected to</string>
     <string name="connection_disconnected_from">Disconnected from</string>
     <string name="connection_unknown_status">Unknown connection status to</string>
@@ -60,14 +62,5 @@
 
     <string name="notifyTitle">MQTT Message Received</string>
     <string name="notifyTitle_connectionLost">MQTT Client Has Lost Connection</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
 
 </resources>

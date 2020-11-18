@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-public class HomeFragment extends Fragment implements MainActivity.DataFromActivityToFragment {
+public class HomeFragment extends Fragment {
     TextView dataReceived;
 
     @Override
@@ -26,12 +26,5 @@ public class HomeFragment extends Fragment implements MainActivity.DataFromActiv
 
 
         return view;
-    }
-
-    @Override
-    public void sendData(String data) {
-        if (data != null) {
-            dataReceived.setText(data);
-        }
     }
 }
