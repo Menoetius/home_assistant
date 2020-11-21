@@ -54,26 +54,7 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        existePingServidor();
-
         startMqtt();
-    }
-
-    private void existePingServidor() {
-        InetAddress in;
-        Boolean ping;
-        try {
-            in = InetAddress.getByName("192.168.42.172");
-
-            if (in.isReachable(5000)) {
-                Toast.makeText(this, "Yes, Connected to Google", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "No, Connected to Google", Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void startMqtt() {
@@ -81,11 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mqttHelper.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean b, String s) {
-                Bundle bundle = new Bundle();
-                bundle.putString("response", s);
-                // set Fragmentclass Arguments
-                HomeFragment fragobj = new HomeFragment();
-                fragobj.setArguments(bundle);
+                Log.w("connectComplete", s.toString());
             }
 
             @Override

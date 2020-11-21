@@ -142,10 +142,9 @@ public class SocketFactory extends javax.net.ssl.SSLSocketFactory {
         }
 
         // Create an SSLContext that uses our TrustManager
-        SSLContext context = SSLContext.getInstance("TLSv1.2");
+        SSLContext context = SSLContext.getInstance("TLS");
         context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         this.factory = context.getSocketFactory();
-
     }
 
     public TrustManager[] getTrustManagers() {
