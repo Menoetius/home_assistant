@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.example.homeassistant.helpers.DatabaseHelper;
 import com.example.homeassistant.helpers.MqttHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setUpNavigation();
+
+        DatabaseHelper db = new DatabaseHelper(MainActivity.this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
