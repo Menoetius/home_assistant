@@ -16,7 +16,6 @@ import java.util.List;
 
 
 public class SettingsFragment extends Fragment implements SettingsListAdapter.SettingsItemOnClickListener {
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -35,9 +34,9 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Se
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         // Add the following lines to create RecyclerView
-        recyclerView = view.findViewById(R.id.rvItems);
+        RecyclerView recyclerView = view.findViewById(R.id.rvItems);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setClickable(true);
+//        recyclerView.setClickable(true);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));

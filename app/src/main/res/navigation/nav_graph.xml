@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/loadingFragment">
 
     <fragment
         android:id="@+id/HomeFragment"
         android:name="com.example.homeassistant.HomeFragment"
-        android:label="@string/first_fragment_label"
+        android:label="HomeFragment"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/LogsFragment"
         android:name="com.example.homeassistant.LogsFragment"
-        android:label="@string/second_fragment_label"
+        android:label="LogsFragment"
         tools:layout="@layout/fragment_logs" />
 
     <fragment
@@ -33,23 +33,12 @@
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.homeassistant.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        android:id="@+id/loadingFragment"
+        android:name="com.example.homeassistant.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading" >
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.homeassistant.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_loadingFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
     </fragment>
 </navigation>

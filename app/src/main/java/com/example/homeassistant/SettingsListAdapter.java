@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class SettingsListAdapter extends RecyclerView.Adapter<SettingsRecycleViewHolder> {
-    private List<SettingsItem> dataSet;
-    private SettingsItemOnClickListener settingsItemOnClickListener;
+    private final List<SettingsItem> dataSet;
+    private final SettingsItemOnClickListener settingsItemOnClickListener;
 
     public SettingsListAdapter(List<SettingsItem> data, SettingsItemOnClickListener listener) {
         dataSet = data;

@@ -9,6 +9,14 @@ public class ConnectionModel {
     private String url;
     private String protocol;
 
+    public ConnectionModel(int id, String deviceId) {
+        this.id = id;
+        this.deviceId = deviceId;
+    }
+
+    public ConnectionModel() {
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -47,14 +55,6 @@ public class ConnectionModel {
 
     public void setProtocol(String protocol) {
         this.protocol = protocol;
-    }
-
-    public ConnectionModel(int id, String deviceId) {
-        this.id = id;
-        this.deviceId = deviceId;
-    }
-
-    public ConnectionModel() {
     }
 
     public int getId() {
