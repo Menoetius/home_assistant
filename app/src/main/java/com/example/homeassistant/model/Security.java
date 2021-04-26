@@ -1,5 +1,8 @@
 package com.example.homeassistant.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Security {
     String id;
     String type;
@@ -67,5 +70,20 @@ public class Security {
                 ", icon='" + icon + '\'' +
                 ", active=" + active +
                 '}';
+    }
+
+    public String getSetMessage(boolean value) {
+        long timestamp = System.currentTimeMillis();
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("type", getName().toLowerCase());
+            obj.put("timestamp", Long.toString(timestamp));
+            obj.put("priority_level", 2);
+            obj.put("value", value);
+        } catch (
+                JSONException e) {
+            e.printStackTrace();
+        }
+        return obj.toString();
     }
 }

@@ -9,9 +9,14 @@ public class ConnectionModel {
     private String url;
     private String protocol;
 
-    public ConnectionModel(int id, String deviceId) {
+    public ConnectionModel(int id, String deviceId, String userName, String password, int port, String url, String protocol) {
         this.id = id;
         this.deviceId = deviceId;
+        this.userName = userName;
+        this.password = password;
+        this.port = port;
+        this.url = url;
+        this.protocol = protocol;
     }
 
     public ConnectionModel() {

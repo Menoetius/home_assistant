@@ -7,4 +7,9 @@
     <color name="colorSettings">#E64F4F</color>
     <color name="colorSecurity">#66E64F</color>
     <color name="colorTemperature">#E6D24F</color>
+    <color name="colorBlackText">#000000</color>
+    <color name="colorSelectedUnderline">#6395ad</color>
+    <color name="deviceOff">#22000000</color>
+    <color name="deviceOn">#ddffffff</color>
+    <color name="colorDarkGrey">#2B2B2B</color>
 </resources>

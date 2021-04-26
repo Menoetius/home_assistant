@@ -1,9 +1,12 @@
 package com.example.homeassistant.model;
 
+import android.util.Log;
+
 import com.example.homeassistant.devices.CameraDevice;
 import com.example.homeassistant.model.Room;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +16,7 @@ public class BrokerData {
     private TreeMap<String, Room> rooms;
     private TreeMap<String, Scene> scenes;
     private TreeMap<String, Alert> alerts;
-//    private Room[] activities;
+    private ArrayList<Activity> activities;
     private TreeMap<String, Security> security;
 
     public BrokerData() {
@@ -28,8 +31,58 @@ public class BrokerData {
         this.security = security;
     }
 
+    public void setActivities(ArrayList<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
+    }
+
+    public void addActivity(Activity activity) {
+        this.activities.add(0, activity);
+    }
+
+    public void addActivities(ArrayList<Activity> activities) {
+        this.activities.addAll(activities);
+    }
+
     public TreeMap<String, Room> getRooms() {
-        return rooms;
+        return new TreeMap<>(rooms);
+    }
+
+    public ArrayList<Room> getRoomsList() {
+        return new ArrayList<>(rooms.values());
+    }
+
+    public Room getRoomById(String roomId) {
+        return rooms.get(roomId);
+    }
+
+    public ArrayList<Security> getSecurityList() {
+        return new ArrayList<>(security.values());
+    }
+
+    public void setActiveSecurity(String id) {
+        for(Map.Entry<String,Security> securityEntry : security.entrySet()) {
+            securityEntry.getValue().setActive(securityEntry.getValue().getId().equals(id));
+        }
+    }
+
+    public Alert getAlertByName(String name) {
+        if(alerts.containsKey(name)) {
+            return alerts.get(name);
+        }
+
+        return null;
+    }
+
+    public ArrayList<Alert> getAlertsList() {
+        return new ArrayList<>(alerts.values());
+    }
+
+    public ArrayList<String> getRoomIds() {
+        return new ArrayList<>(rooms.keySet());
     }
 
     @Override
@@ -42,16 +95,46 @@ public class BrokerData {
     }
 
     public ArrayList<CameraDevice> getRoomCameras() {
-        ArrayList<CameraDevice> cameras = new ArrayList<CameraDevice>();
+        ArrayList<CameraDevice> cameras = new ArrayList<>();
         for(Map.Entry<String,Room> entry : rooms.entrySet()) {
             Room room = entry.getValue();
-            cameras.add(room.getRoomCamera());
+            cameras.add(room.getCamera());
         }
-
         return cameras;
     }
 
     public ArrayList<Scene> getScenes() {
         return new ArrayList<>(scenes.values());
+    }
+
+    public void setActiveScene(String id) {
+        for(Map.Entry<String,Scene> scene : scenes.entrySet()) {
+            scene.getValue().setActive(scene.getKey().equals(id));
+        }
+    }
+
+    public ArrayList<DeviceModel> getAllDevices() {
+        ArrayList<DeviceModel> devices = new ArrayList<DeviceModel>();
+        for(Map.Entry<String,Room> entry : rooms.entrySet()) {
+            Room room = entry.getValue();
+
+            devices.addAll(room.getDevices());
+        }
+
+        return devices;
+    }
+
+    public DeviceModel getDeviceById(String id) {
+        for(Map.Entry<String,Room> entry : rooms.entrySet()) {
+            Room room = entry.getValue();
+
+            for(DeviceModel device : room.getDevices()) {
+                if (device.getId().equals(id)) {
+                    return device;
+                }
+            }
+        }
+
+        return null;
     }
 }

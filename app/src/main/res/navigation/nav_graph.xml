@@ -3,29 +3,105 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loadingFragment">
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.homeassistant.views.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/HomeFragment"
-        android:name="com.example.homeassistant.HomeFragment"
+        android:name="com.example.homeassistant.views.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_HomeFragment_to_fullscreenCameraFragment"
+            app:destination="@id/fullscreenCameraFragment">
+            <argument
+                android:name="imageUrl"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_HomeFragment_to_ActivitiesFragment"
+            app:destination="@id/ActivitiesFragment" />
+    </fragment>
+
     <fragment
-        android:id="@+id/LogsFragment"
-        android:name="com.example.homeassistant.LogsFragment"
-        android:label="LogsFragment"
-        tools:layout="@layout/fragment_logs" />
+        android:id="@+id/ActivitiesFragment"
+        android:name="com.example.homeassistant.views.ActivitiesFragment"
+        android:label="ActivitiesFragment"
+        tools:layout="@layout/fragment_activities" />
+
+    <fragment
+        android:id="@+id/fullscreenCameraFragment"
+        android:name="com.example.homeassistant.views.FullscreenCameraFragment"
+        android:label="fragment_fullscreen_camera"
+        tools:layout="@layout/fragment_fullscreen_camera">
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+        <argument
+            android:name="streamUrl"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fullscreenCameraFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/RoomsFragment"
+        android:name="com.example.homeassistant.views.RoomsFragment"
+        android:label="RoomsFragment"
+        tools:layout="@layout/fragment_rooms" >
+        <action
+            android:id="@+id/action_RoomsFragment_to_SocketFragment"
+            app:destination="@id/SocketFragment" />
+        <action
+            android:id="@+id/action_RoomsFragment_to_BlindsFragment"
+            app:destination="@id/BlindsFragment" />
+        <action
+            android:id="@+id/action_RoomsFragment_to_LightFragment"
+            app:destination="@id/LightFragment" />
+        <action
+            android:id="@+id/action_RoomsFragment_to_editRoomFragment"
+            app:destination="@id/editRoomFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SocketFragment"
+        android:name="com.example.homeassistant.views.devices.SocketFragment"
+        android:label="SocketFragment"
+        tools:layout="@layout/fragment_socket" />
+
+    <fragment
+        android:id="@+id/BlindsFragment"
+        android:name="com.example.homeassistant.views.devices.BlindsFragment"
+        android:label="BlindsFragment"
+        tools:layout="@layout/fragment_blinds" />
+
+    <fragment
+        android:id="@+id/LightFragment"
+        android:name="com.example.homeassistant.views.devices.LightFragment"
+        android:label="LightFragment"
+        tools:layout="@layout/fragment_light" />
 
     <fragment
         android:id="@+id/SecurityFragment"
-        android:name="com.example.homeassistant.SecurityFragment"
+        android:name="com.example.homeassistant.views.SecurityFragment"
         android:label="SecurityFragment"
         tools:layout="@layout/fragment_security" />
-    <fragment
-        android:id="@+id/TemperatureFragment"
-        android:name="com.example.homeassistant.TemperatureFragment"
-        android:label="TemperatureFragment"
-        tools:layout="@layout/fragment_temperature" />
+
+<!--    <fragment-->
+<!--        android:id="@+id/TemperatureFragment"-->
+<!--        android:name="com.example.homeassistant.TemperatureFragment"-->
+<!--        android:label="TemperatureFragment"-->
+<!--        tools:layout="@layout/fragment_temperature" />-->
 
     <fragment
         android:id="@+id/SettingsFragment"
@@ -33,12 +109,11 @@
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/loadingFragment"
-        android:name="com.example.homeassistant.LoadingFragment"
-        android:label="fragment_loading"
-        tools:layout="@layout/fragment_loading" >
-        <action
-            android:id="@+id/action_loadingFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
+        android:id="@+id/editRoomFragment"
+        android:name="com.example.homeassistant.views.EditRoomFragment"
+        android:label="EditRoomFragment">
+        <argument
+            android:name="room_id"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -6,7 +6,7 @@
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/LogsFragment"
+        android:id="@+id/RoomsFragment"
         android:icon="@drawable/ic_logs"
         android:title="@string/nav_logs" />
 
@@ -15,10 +15,10 @@
         android:icon="@drawable/ic_security"
         android:title="@string/nav_security" />
 
-    <item
-        android:id="@+id/TemperatureFragment"
-        android:icon="@drawable/ic_temperature"
-        android:title="@string/nav_temperature" />
+<!--    <item-->
+<!--        android:id="@+id/TemperatureFragment"-->
+<!--        android:icon="@drawable/ic_temperature"-->
+<!--        android:title="@string/nav_temperature" />-->
 
     <item
         android:id="@+id/SettingsFragment"

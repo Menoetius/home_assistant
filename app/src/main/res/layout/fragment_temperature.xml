@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,4 +22,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+<!--    <com.marcinmoskala.arcseekbar.ArcSeekBar-->
+<!--        android:id="@+id/temperatureSeekBar"-->
+<!--        android:layout_width="304dp"-->
+<!--        android:layout_height="96dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"-->
+<!--        app:layout_constraintVertical_bias="0.498"-->
+<!--        app:progress="100"-->
+<!--        app:progressColor="#b5fff6"-->
+<!--        app:progressBackgroundWidth="20dp"-->
+<!--        app:progressWidth="20dp"-->
+<!--        app:roundEdges="true" />-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

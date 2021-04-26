@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.homeassistant.MainActivity;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.homeassistant.model.ConnectionModel;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -20,178 +22,150 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Timestamp;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 public class MqttHelper {
     public MqttAndroidClient mqttAndroidClient;
-    private final Context mContext;
+    public final Context mContext;
+    private DatabaseHelper db;
+    private ConnectionModel connectionModel;
 
-    //   final String serverUri = "tcp://broker.hivemq.com:1883";
-    final String serverUri = "ssl://192.168.42.172:8883";
-//    final String serverUri = "ssl://test.mosquitto.org:8883";
-
-
-    final String deviceId = "ANMA123654987"/*MqttClient.generateClientId()*/;
-
-    final String username = "mqtt2go";
-    final String password = "FritzBox2";
+    final String deviceId = MqttClient.generateClientId();
 
     public MqttHelper(Context context) {
         mContext = context;
-        mqttAndroidClient = new MqttAndroidClient(context, serverUri, deviceId);
-        mqttAndroidClient.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean b, String s) {
 
-                Log.w("mqtt", s);
-            }
+        db = new DatabaseHelper(context.getApplicationContext());
+        connectionModel = db.getLast();
 
-            @Override
-            public void connectionLost(Throwable throwable) {
-
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-                Log.w("Mqtt", mqttMessage.toString());
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-
-            }
-        });
-        connect();
+        mqttAndroidClient = new MqttAndroidClient(context, buildServerUri(connectionModel), deviceId);
     }
 
     public void setCallback(MqttCallbackExtended callback) {
         mqttAndroidClient.setCallback(callback);
     }
 
-    private void connect() {
+    public void connect(IMqttActionListener listener) {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
-        mqttConnectOptions.setUserName(username);
-        mqttConnectOptions.setPassword(password.toCharArray());
+        mqttConnectOptions.setUserName(connectionModel.getUserName());
+        mqttConnectOptions.setPassword(connectionModel.getPassword().toCharArray());
 
-//        SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
-        try {
-//            socketFactoryOptions.withCaInputStream(context.getResources().openRawResource(R.raw.ca));
-//            mqttConnectOptions.setSocketFactory(new SocketFactory(socketFactoryOptions));
-            final TrustManager[] myTrustManager = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+        if (connectionModel.getProtocol().equals("ssl")) {
+            SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
+            try {
+                socketFactoryOptions.withCaInputStream(mContext.getResources().openRawResource(mContext.getResources().getIdentifier("@raw/ca", "raw", mContext.getPackageName())));
+                mqttConnectOptions.setSocketFactory(new SocketFactory(socketFactoryOptions));
+            } catch (NoSuchAlgorithmException | KeyManagementException | IOException | CertificateException | UnrecoverableKeyException | KeyStoreException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                final TrustManager[] myTrustManager = new TrustManager[]{
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                return new java.security.cert.X509Certificate[]{};
+                            }
                         }
+                };
 
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            };
-
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, myTrustManager, new java.security.SecureRandom());
-            mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            e.printStackTrace();
+                final SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, myTrustManager, new java.security.SecureRandom());
+                mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
-            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Toast.makeText(mContext, "Connected!", Toast.LENGTH_SHORT).show();
-                    DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
-                    disconnectedBufferOptions.setBufferEnabled(true);
-                    disconnectedBufferOptions.setBufferSize(100);
-                    disconnectedBufferOptions.setPersistBuffer(false);
-                    disconnectedBufferOptions.setDeleteOldestMessages(false);
-                    mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                    subscribeToTopic();
-                }
-
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.w("Mqtt", "Failed to connect to: " + serverUri + "\n" + exception.toString());
-                }
-            });
-
+            mqttAndroidClient.connect(mqttConnectOptions, mContext, listener);
         } catch (MqttException ex) {
             ex.printStackTrace();
         }
     }
 
-
-    private void subscribeToTopic() {
-        try {
-            mqttAndroidClient.subscribe("BRQ/BUT/devices/out", 0, null, new IMqttActionListener() {
+    public void subscribeToTopic(String topic, Integer qos, Context context, IMqttActionListener actionListener, IMqttMessageListener messageListener) {
+        if (actionListener == null) { // todo toto pri service nebude fungovat
+            actionListener = new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.w("Mqtt", "BRQ/BUT/#");
-                    publishToTopic();
+                    Log.d("Mqtt", "Subscribed successfully!");
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.w("Mqtt", "Subscribed fail!");
+                    Log.d("Mqtt", "Subscribed fail!");
                 }
-            });
+            };
+        }
 
+        try {
+            if (messageListener != null) {
+                mqttAndroidClient.subscribe(topic, qos != null ? qos : 0, mContext, actionListener, messageListener);
+            } else {
+                mqttAndroidClient.subscribe(topic, qos != null ? qos : 0, mContext, actionListener);
+            }
         } catch (MqttException ex) {
             System.err.println("Exception whilst subscribing");
             ex.printStackTrace();
         }
     }
 
-    private void publishToTopic() {
-        long timestamp = System.currentTimeMillis();
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("type", "query_gui_dev");
-            obj.put("timestamp", Long.toString(timestamp));
-            obj.put("priority_level", 1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String topic = "BRQ/BUT/in";
-        String payload = obj.toString();
-        byte[] encodedPayload = new byte[0];
+    public void publishToTopic(String topic, String payload, Integer qos) {
+        byte[] encodedPayload;
         try {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
             MqttMessage message = new MqttMessage(encodedPayload);
-            message.setQos(2);
+            message.setQos(qos != null ? qos : 0);
             Log.w("publish", "topic: " + topic + " message: " + payload);
             mqttAndroidClient.publish(topic, message);
         } catch (MqttException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        return mqttAndroidClient.isConnected();
+    }
+
+    public void setDisconnectOptions() {
+        DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
+        disconnectedBufferOptions.setBufferEnabled(true);
+        disconnectedBufferOptions.setBufferSize(100);
+        disconnectedBufferOptions.setPersistBuffer(false);
+        disconnectedBufferOptions.setDeleteOldestMessages(false);
+        mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
+    }
+
+    public void unSubscribe(String topic) {
+        try {
+            mqttAndroidClient.unsubscribe(topic);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String buildServerUri(ConnectionModel connectionModel) {
+        return "ssl://" + connectionModel.getUrl() + ":" + connectionModel.getPort();
     }
 }
