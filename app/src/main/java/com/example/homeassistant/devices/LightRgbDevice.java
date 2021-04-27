@@ -195,8 +195,6 @@ public class LightRgbDevice extends DeviceModel {
                     setState("on");
                     break;
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

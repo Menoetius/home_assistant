@@ -20,7 +20,7 @@ public class RoomModel {
         this.id = id;
         this.room_id = room_id;
         this.name = name;
-        this.backgroundImage = bitmapToString(resizeBitmap(backgroundImage));
+        this.backgroundImage = bitmapToString(backgroundImage);
     }
 
     public RoomModel(int id, String room_id, String name, String backgroundImage) {
@@ -63,7 +63,7 @@ public class RoomModel {
     }
 
     public void setBackgroundImage(Bitmap backgroundImage) {
-        this.backgroundImage = bitmapToString(resizeBitmap(backgroundImage));
+        this.backgroundImage = bitmapToString(backgroundImage);
     }
 
     @Override

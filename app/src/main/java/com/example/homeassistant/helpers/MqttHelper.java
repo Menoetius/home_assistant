@@ -58,7 +58,7 @@ public class MqttHelper {
     public void connect(IMqttActionListener listener) {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
-        mqttConnectOptions.setCleanSession(false);
+        mqttConnectOptions.setCleanSession(true);
         mqttConnectOptions.setUserName(connectionModel.getUserName());
         mqttConnectOptions.setPassword(connectionModel.getPassword().toCharArray());
 

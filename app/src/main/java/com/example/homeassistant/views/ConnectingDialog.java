@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.adapters.CameraAdapter;
@@ -19,12 +20,18 @@ public class ConnectingDialog {
         this.activity = activity;
     }
 
-    void startConnectingDialog() {
+    void startConnectingDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.connecting_dialog, null));
+        View view = inflater.inflate(R.layout.connecting_dialog, null);
+        builder.setView(view);
         builder.setCancelable(false);
+
+        if (message != null && !message.equals("")) {
+            TextView tvMessage = view.findViewById(R.id.tvMessage);
+            tvMessage.setText(message);
+        }
 
         dialog = builder.create();
         dialog.show();

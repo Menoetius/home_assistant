@@ -362,6 +362,7 @@ public class SocketDevice extends DeviceModel {
 
             switch (type) {
                 case "command_response":
+                case "set":
                     String value = obj.getString("value");
                     setState(value);
                     break;

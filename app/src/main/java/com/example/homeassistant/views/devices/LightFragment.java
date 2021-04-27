@@ -53,6 +53,8 @@ public class LightFragment extends Fragment {
             }
         });
 
+        TextView tvBrightness = view.findViewById(R.id.tvBrightness);
+        TextView tvColor = view.findViewById(R.id.tvColor);
         tvState = view.findViewById(R.id.tvState);
         ivState = view.findViewById(R.id.ivState);
         slider = view.findViewById(R.id.slider);
@@ -64,8 +66,18 @@ public class LightFragment extends Fragment {
 
         tvDeviceName.setText(device.getName());
         initState();
-        initSlider();
-        initColorPickerView();
+        if (!device.getStringValue("brightness").equals("")) {
+            initSlider();
+        } else {
+            tvBrightness.setVisibility(View.INVISIBLE);
+            slider.setVisibility(View.INVISIBLE);
+        }
+        if (!device.getStringValue("color").equals("")) {
+            initColorPickerView();
+        } else {
+            tvColor.setVisibility(View.INVISIBLE);
+            colorPickerView.setVisibility(View.INVISIBLE);
+        }
 
         ivState.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,8 +112,10 @@ public class LightFragment extends Fragment {
             tvState.setText(R.string.state_off);
             ivState.setImageResource(R.drawable.ic_power_off);
         }
-        int number = Integer.parseInt(brightness);
-        slider.setValue(number);
+        if (!brightness.equals("")) {
+            int number = Integer.parseInt(brightness);
+            slider.setValue(number);
+        }
         if (!color.equals("") && !color.equals("0")) {
             colorPickerView.setColor(Integer.parseInt(color), false);
         }

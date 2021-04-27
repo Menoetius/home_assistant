@@ -37,13 +37,13 @@ public class MqttService extends Service {
     private MqttHelper mqttHelper;
     private final IBinder mBinder = new MyBinder();
     private MutableLiveData<Boolean> hasCredentials = new MutableLiveData<>();
-    private MutableLiveData<Boolean> connected = new MutableLiveData<>();
+    private MutableLiveData<String> connected = new MutableLiveData<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
         this.hasCredentials.setValue(false);
-        this.connected.setValue(false);
+        this.connected.setValue("");
         createNotificationChannel();
         db = new DatabaseHelper(getApplicationContext());
 
@@ -75,12 +75,14 @@ public class MqttService extends Service {
             public void onSuccess(IMqttToken asyncActionToken) {
                 Toast.makeText(mqttHelper.mContext, "Connected!", Toast.LENGTH_SHORT).show();
                 mqttHelper.setDisconnectOptions();
-                connected.setValue(true);
+                connected.setValue("connected");
             }
 
             @Override
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                Log.w("Failed to connect", exception.toString());
                 Toast.makeText(mqttHelper.mContext, "Failed to connect. Try again later.", Toast.LENGTH_SHORT).show();
+                connected.setValue("failure");
             }
         });
     }
@@ -101,7 +103,7 @@ public class MqttService extends Service {
         return mqttHelper;
     }
 
-    public MutableLiveData<Boolean> getConnected(){
+    public MutableLiveData<String> getConnected(){
         return connected;
     }
 

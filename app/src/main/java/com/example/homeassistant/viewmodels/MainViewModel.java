@@ -22,7 +22,7 @@ public class MainViewModel extends ViewModel {
     private BrokerDataRepository brokerDataRepository;
     private DevicesRepository devicesRepository;
     private MutableLiveData<BrokerData> brokerData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> hasLogin = new MutableLiveData<>();
+    private Boolean isLoggedIn = false;
     private MutableLiveData<Integer> refresh = new MutableLiveData<>();
     private MutableLiveData<String> pendingAlert = new MutableLiveData<>();
     private MutableLiveData<String> actualDevice = new MutableLiveData<>();
@@ -51,7 +51,6 @@ public class MainViewModel extends ViewModel {
         pendingAlert.setValue("");
         brokerDataRepository = BrokerDataRepository.getInstance(MainViewModel.this);
         devicesRepository = DevicesRepository.getInstance(MainViewModel.this);
-//        brokerData = brokerDataRepository.getBrokerData();
     }
 
     public ServiceConnection getServiceConnection(){
@@ -95,5 +94,13 @@ public class MainViewModel extends ViewModel {
 
     public void setPendingAlert(String pendingAlert) {
         this.pendingAlert.postValue(pendingAlert);
+    }
+
+    public Boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(Boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
     }
 }

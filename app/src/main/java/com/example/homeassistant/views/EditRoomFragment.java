@@ -9,11 +9,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +21,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.homeassistant.R;
 import com.example.homeassistant.helpers.DatabaseHelper;
 import com.example.homeassistant.model.Room;
 import com.example.homeassistant.model.RoomModel;
 import com.example.homeassistant.viewmodels.MainViewModel;
-import com.example.homeassistant.views.devices.LightFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,20 +35,21 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class EditRoomFragment extends Fragment {
-    private static final int GALLERY_REQUEST_CODE = 100;
-    private static final int CAMERA_REQUEST_CODE = 200;
+    private static final int GALLERY_REQUEST_CODE = 50;
+    private static final int CAMERA_REQUEST_CODE = 60;
 
     private DatabaseHelper db;
     private RoomModel roomModel;
     private Room room;
     private MainViewModel model;
 
+    Bitmap savedImage;
+
     private ImageView ivSelected;
     private EditText etRoomName;
     private Button bCamera;
     private Button bGallery;
     private String roomId;
-    private TextView tvRoomName;
 
     public EditRoomFragment() {
     }
@@ -85,16 +83,26 @@ public class EditRoomFragment extends Fragment {
                 EditRoomFragment.this.getActivity().onBackPressed();
             }
         });
+        ImageButton ibSave = view.findViewById(R.id.ibSave);
+        ibSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
 
         this.ivSelected = view.findViewById(R.id.ivSelected);
         this.etRoomName = view.findViewById(R.id.etChoosenRoomName);
         this.bCamera = view.findViewById(R.id.bCamera);
         this.bGallery = view.findViewById(R.id.bGallery);
-        this.tvRoomName = view.findViewById(R.id.tvRoomName);
 
         if (roomModel != null) {
             etRoomName.setText(roomModel.getName());
-            ivSelected.setImageBitmap(roomModel.getBackgroundImageAsBitmap());
+            savedImage = roomModel.getBackgroundImageAsBitmap();
+            Glide.with(EditRoomFragment.this)
+                    .load(savedImage)
+                    .thumbnail(0.5f)
+                    .into(ivSelected);
         } else {
             etRoomName.setText(room.getName());
         }
@@ -132,12 +140,13 @@ public class EditRoomFragment extends Fragment {
     }
 
     public void save() {
-        Bitmap image = ((BitmapDrawable) ivSelected.getDrawable()).getBitmap();
         if (roomModel == null) {
-            roomModel = new RoomModel(-1, roomId, etRoomName.getText().toString(), image);
+            roomModel = new RoomModel(-1, roomId, etRoomName.getText().toString(), savedImage);
             db.addRoom(roomModel);
         } else {
-            roomModel.setBackgroundImage(image);
+            if (savedImage != ((BitmapDrawable) ivSelected.getDrawable()).getBitmap()) {
+                roomModel.setBackgroundImage(savedImage);
+            }
             roomModel.setName(etRoomName.getText().toString());
             db.updateRoom(roomModel);
         }
@@ -151,7 +160,10 @@ public class EditRoomFragment extends Fragment {
             try {
                 Uri selectedImage = data.getData();
                 InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
-                ivSelected.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+                savedImage = BitmapFactory.decodeStream(imageStream);
+                Glide.with(EditRoomFragment.this)
+                        .load(savedImage)
+                        .into(ivSelected);
             } catch (IOException exception) {
                 exception.printStackTrace();
             }

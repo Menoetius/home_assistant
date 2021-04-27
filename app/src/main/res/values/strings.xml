@@ -9,6 +9,7 @@
     <string name="room_name">Room name</string>
     <string name="activities">Activities</string>
     <string name="rooms">Rooms</string>
+    <string name="fetching_data_from_server">Fetching data from server…</string>
 
     //rooms fragment
     <string name="accessories">Accessories</string>
@@ -95,6 +96,7 @@
     <string name="alert_placeholder">Alert message!</string>
 
     //edit room
+    <string name="room_settings">Room settings</string>
     <string name="take_a_picture">Take a picture</string>
     <string name="choose_from_gallery">Choose from gallery</string>
 

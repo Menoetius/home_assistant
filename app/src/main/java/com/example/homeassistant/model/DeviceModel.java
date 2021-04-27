@@ -75,12 +75,12 @@ public class DeviceModel {
     }
 
     public Map<String,String> getSwitchMessage(boolean state) {
-        Map<String,String> map=new HashMap<String,String>();
+        Map<String,String> map = new HashMap<String,String>();
         long timestamp = System.currentTimeMillis();
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "set");
-            obj.put("timestamp", Long.toString(timestamp));
+            obj.put("timestamp", timestamp);
             obj.put("value", state ? "on" : "off");
         } catch (
                 JSONException e) {

@@ -1,22 +1,33 @@
 package com.example.homeassistant.views;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.helpers.DatabaseHelper;
+import com.example.homeassistant.helpers.MqttHelper;
+import com.example.homeassistant.model.BrokerData;
 import com.example.homeassistant.model.ConnectionModel;
+import com.example.homeassistant.services.MqttService;
 import com.example.homeassistant.viewmodels.MainViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class LoginFragment extends Fragment {
     private View view;
@@ -60,9 +71,14 @@ public class LoginFragment extends Fragment {
         bConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.addConnection(new ConnectionModel(-1, "", etUsername.getText().toString(), etPassword.getText().toString(), Integer.parseInt(etPort.getText().toString()), etUrl.getText().toString(), sSSL.isChecked() ? "ssl" : ""));
+                closeKeyboard();
+
+                db.addConnection(new ConnectionModel(-1, "", etUsername.getText().toString(), etPassword.getText().toString(), etPort.getText().toString().equals("") ? 8883 : Integer.parseInt(etPort.getText().toString()), etUrl.getText().toString(), sSSL.isChecked() ? "ssl" : ""));
 
                 model.getBinder().getValue().getService().startMqtt();
+
+                setObserver();
+                connect();
             }
         });
 
@@ -71,18 +87,63 @@ public class LoginFragment extends Fragment {
 
     private void connect() {
         connectingDialog = new ConnectingDialog(getActivity());
-        connectingDialog.startConnectingDialog();
+        connectingDialog.startConnectingDialog("");
     }
 
     private void setForm() {
         ConnectionModel connectionModel = db.getLast();
 
-        if (connectionModel != null) {
+        if (connectionModel != null && !model.getIsLoggedIn()) {
             etUrl.setText(connectionModel.getUrl());
             etPort.setText(connectionModel.getPort()+"");
             etUsername.setText(connectionModel.getUserName());
             etPassword.setText(connectionModel.getPassword());
             sSSL.setChecked(connectionModel.getProtocol().equals("ssl"));
+
+            setObserver();
+            connect();
+        }
+    }
+
+    private void setObserver() {
+        model.getBinder().observe(getActivity(), new Observer<MqttService.MyBinder>() {
+            @Override
+            public void onChanged(@Nullable MqttService.MyBinder myBinder) {
+                if(myBinder != null) {
+                    if (myBinder.getService() != null) {
+                        model.getBinder().getValue().getService().getConnected().observe(getActivity(), new Observer<String>() {
+                            @Override
+                            public void onChanged(String connected) {
+                                if (connected.equals("connected") || connected.equals("failure")) {
+                                    if (connected.equals("connected")) {
+                                        model.setIsLoggedIn(true);
+                                    }
+                                    if (connectingDialog != null) {
+                                        connectingDialog.dismissDialog();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (connectingDialog != null) {
+            connectingDialog.dismissDialog();
+        }
+    }
+
+    private void closeKeyboard() {
+        View view = getView();
+        if (view != null) {
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }

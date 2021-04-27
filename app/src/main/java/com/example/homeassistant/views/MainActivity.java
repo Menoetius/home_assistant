@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setObservers(){
-        model.getBinder().observe(this, new Observer<MqttService.MyBinder>() {
+        model.getBinder().observe(MainActivity.this, new Observer<MqttService.MyBinder>() {
             @Override
             public void onChanged(@Nullable MqttService.MyBinder myBinder) {
                 if(myBinder == null) {
@@ -100,18 +100,18 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onChanged: bound to service.");
                     mService = myBinder.getService();
                     if (mService != null) {
-                        mService.getConnected().observe(MainActivity.this, new Observer<Boolean>() {
+                        mService.getConnected().observe(MainActivity.this, new Observer<String>() {
                             @Override
-                            public void onChanged(Boolean aBoolean) {
-                                if (aBoolean) {
+                            public void onChanged(String connected) {
+                                if (connected.equals("connected")) {
                                     connect();
-                                    MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
-                                    mqttHelper.subscribeToTopic("BRQ/BUT/#", 0, MainActivity.this, null, new IMqttMessageListener(){
-                                        @Override
-                                        public void messageArrived(String topic, MqttMessage message) throws Exception {
-                                            Log.i("MESSAGE", "TOPIC: " + topic + " MESSAGE: " + message.toString());
-                                        }
-                                    });
+//                                    MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
+//                                    mqttHelper.subscribeToTopic("BRQ/BUT/#", 0, MainActivity.this, null, new IMqttMessageListener(){
+//                                        @Override
+//                                        public void messageArrived(String topic, MqttMessage message) throws Exception {
+//                                            Log.i("MESSAGE", "TOPIC: " + topic + " MESSAGE: " + message.toString());
+//                                        }
+//                                    });
 
                                     model.initBrokerData();
 
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void connect() {
         connectingDialog = new ConnectingDialog(MainActivity.this);
-        connectingDialog.startConnectingDialog();
+        connectingDialog.startConnectingDialog(getString(R.string.fetching_data_from_server));
     }
 
     @Override
