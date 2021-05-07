@@ -54,6 +54,8 @@ public class RoomDevicesAdapter extends RecyclerView.Adapter<RoomDevicesAdapter.
                 ColorMatrix colorMatrix = new ColorMatrix();
                 colorMatrix.setSaturation(0);
                 ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+                tvDeviceName.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.colorDeviceNameLight));
+                tvDeviceStatus.setTextColor(ContextCompat.getColor(fragment.getContext(), R.color.colorDeviceStateLight));
                 ivDeviceIcon.setColorFilter(filter);
                 ivDeviceIcon.setImageAlpha(130);
             }

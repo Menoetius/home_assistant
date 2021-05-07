@@ -190,6 +190,7 @@ public class LightRgbDevice extends DeviceModel {
 
             switch (type) {
                 case "brightness":
+                case "command_response":
                     int value = obj.getInt("value");
                     setBrightness(value);
                     setState("on");

@@ -12,4 +12,8 @@
     <color name="deviceOff">#22000000</color>
     <color name="deviceOn">#ddffffff</color>
     <color name="colorDarkGrey">#2B2B2B</color>
+    <color name="colorDeviceNameLight">#B3FFFFFF</color>
+    <color name="colorDeviceNameDark">#2B2B2B</color>
+    <color name="colorDeviceStateLight">#B3EAEAEA</color>
+    <color name="colorDeviceStateDark">#606060</color>
 </resources>

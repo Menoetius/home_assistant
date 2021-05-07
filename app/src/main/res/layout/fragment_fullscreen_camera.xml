@@ -26,6 +26,8 @@
         android:id="@+id/ivFullscreenBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
         android:src="@drawable/ic_arrow_back"
         app:tint="@android:color/white" />
 </FrameLayout>

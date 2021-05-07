@@ -5,11 +5,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,7 @@ import com.longdo.mjpegviewer.MjpegView;
 public class FullscreenCameraFragment extends Fragment {
     private MjpegView viewer;
     View view;
+    private ImageView image;
 
     public FullscreenCameraFragment() {
     }
@@ -46,7 +45,7 @@ public class FullscreenCameraFragment extends Fragment {
             }
         });
 
-        ImageView image = view.findViewById(R.id.ivImage);
+        image = view.findViewById(R.id.ivImage);
         Glide.with(view.getContext()).load(imageUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .thumbnail(0.5f)
@@ -70,7 +69,7 @@ public class FullscreenCameraFragment extends Fragment {
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        image.setVisibility(View.INVISIBLE);
         super.onConfigurationChanged(newConfig);
-        viewer.setMode(MjpegView.MODE_FIT_WIDTH);
     }
 }
