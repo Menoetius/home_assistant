@@ -1,4 +1,4 @@
-package com.example.homeassistant;
+package com.example.homeassistant.views;
 
 import android.os.Bundle;
 
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.homeassistant.R;
+import com.example.homeassistant.model.SettingsItem;
 import com.example.homeassistant.adapters.SettingsListAdapter;
 
 import java.util.LinkedList;
@@ -67,6 +69,12 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Se
         item = new SettingsItem();
         item.setIcon(R.drawable.ic_presets);
         item.setTitle(getString(R.string.presets));
+
+        items.add(item);
+
+        item = new SettingsItem();
+        item.setIcon(R.drawable.ic_logout);
+        item.setTitle(getString(R.string.logout));
 
         items.add(item);
         return items;

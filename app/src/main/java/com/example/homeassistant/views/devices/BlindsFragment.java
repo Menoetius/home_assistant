@@ -66,7 +66,7 @@ public class BlindsFragment extends Fragment {
             @NonNull
             @Override
             public String getFormattedValue(float value) {
-                return Math.round(value) + " %";
+                return Math.round(100 - value) + " %";
             }
         });
         slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {

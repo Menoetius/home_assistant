@@ -169,6 +169,7 @@ public class LightRgbDevice extends DeviceModel {
 
             switch (type) {
                 case "color":
+                case "command_response":
                     JSONObject valueObj = obj.getJSONObject("value");
                     if (valueObj.has("r") && valueObj.has("g") && valueObj.has("b")) {
                         int color = Color.rgb((float) valueObj.getInt("r") / 255, (float) valueObj.getInt("g") / 255, (float) valueObj.getInt("b") / 255);

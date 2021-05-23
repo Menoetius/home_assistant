@@ -22,7 +22,8 @@
             />
 
         <service
-            android:name=".services.MqttService" />
+            android:name=".services.MqttService"
+            android:exported="false"/>
 
         <activity
             android:name=".views.AddDeviceActivity"

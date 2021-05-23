@@ -27,7 +27,7 @@ public class BrokerAlertDialog {
         LayoutInflater inflater = activity.getLayoutInflater();
         View view = inflater.inflate(R.layout.broker_alert_dialog, null);
         builder.setView(view);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         dialog = builder.create();
 

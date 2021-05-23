@@ -1,11 +1,7 @@
 package com.example.homeassistant.repositiories;
 
-import android.util.Log;
 
-import com.bumptech.glide.gifdecoder.StandardGifDecoder;
-import com.example.homeassistant.helpers.JsonHelper;
 import com.example.homeassistant.helpers.MqttHelper;
-import com.example.homeassistant.model.BrokerData;
 import com.example.homeassistant.model.DeviceModel;
 import com.example.homeassistant.viewmodels.MainViewModel;
 

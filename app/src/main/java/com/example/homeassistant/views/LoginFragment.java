@@ -8,26 +8,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.helpers.DatabaseHelper;
-import com.example.homeassistant.helpers.MqttHelper;
-import com.example.homeassistant.model.BrokerData;
 import com.example.homeassistant.model.ConnectionModel;
 import com.example.homeassistant.services.MqttService;
 import com.example.homeassistant.viewmodels.MainViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class LoginFragment extends Fragment {
     private View view;
@@ -37,7 +30,7 @@ public class LoginFragment extends Fragment {
     private EditText etUsername;
     private EditText etPassword;
     private SwitchMaterial sSSL;
-    private ConnectingDialog connectingDialog;
+    private WaitingDialog waitingDialog;
     MainViewModel model;
 
     public LoginFragment() {
@@ -86,8 +79,8 @@ public class LoginFragment extends Fragment {
     }
 
     private void connect() {
-        connectingDialog = new ConnectingDialog(getActivity());
-        connectingDialog.startConnectingDialog("");
+        waitingDialog = new WaitingDialog(getActivity());
+        waitingDialog.startWaitingDialog("");
     }
 
     private void setForm() {
@@ -118,8 +111,8 @@ public class LoginFragment extends Fragment {
                                     if (connected.equals("connected")) {
                                         model.setIsLoggedIn(true);
                                     }
-                                    if (connectingDialog != null) {
-                                        connectingDialog.dismissDialog();
+                                    if (waitingDialog != null) {
+                                        waitingDialog.dismissDialog();
                                     }
                                 }
                             }
@@ -134,8 +127,8 @@ public class LoginFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        if (connectingDialog != null) {
-            connectingDialog.dismissDialog();
+        if (waitingDialog != null) {
+            waitingDialog.dismissDialog();
         }
     }
 

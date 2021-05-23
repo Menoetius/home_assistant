@@ -96,7 +96,7 @@ public class BrokerDataRepository {
         JSONObject obj = new JSONObject();
         try {
             obj.put("type", "query_gui_dev");
-            obj.put("timestamp", Long.toString(timestamp));
+            obj.put("timestamp", timestamp);
             obj.put("priority_level", 1);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -107,7 +107,7 @@ public class BrokerDataRepository {
         JSONObject obj2 = new JSONObject();
         try {
             obj2.put("type", "query_activities");
-            obj2.put("timestamp", Long.toString(timestamp));
+            obj2.put("timestamp", timestamp);
             obj2.put("priority_level", 1);
         } catch (
                 JSONException e) {

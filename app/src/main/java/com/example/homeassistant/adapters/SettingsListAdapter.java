@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homeassistant.R;
-import com.example.homeassistant.SettingsItem;
+import com.example.homeassistant.model.SettingsItem;
 
 import java.util.List;
 

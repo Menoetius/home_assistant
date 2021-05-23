@@ -52,14 +52,13 @@ public class RoomsFragment extends Fragment {
                     return RecyclerView.NO_POSITION;
                 }
 
-                final View currentView = findSnapView(layoutManager);
-                if(currentView == null){
+                final View currentItemView = findSnapView(layoutManager);
+                if(currentItemView == null) {
                     return RecyclerView.NO_POSITION;
                 }
 
-                return layoutManager.getPosition(currentView);
+                return layoutManager.getPosition(currentItemView);
             }
-
         };
         helper.attachToRecyclerView(rvRoom);
         return view;

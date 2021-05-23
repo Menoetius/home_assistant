@@ -91,6 +91,10 @@ public class BrokerData {
                 "timestamp=" + timestamp +
                 ", type='" + type + '\'' +
                 ", rooms=" + rooms +
+                ", scenes=" + scenes +
+                ", alerts=" + alerts +
+                ", activities=" + activities +
+                ", security=" + security +
                 '}';
     }
 

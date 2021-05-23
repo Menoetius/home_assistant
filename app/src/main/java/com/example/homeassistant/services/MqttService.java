@@ -28,7 +28,6 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 public class MqttService extends Service {
 
-    private static final String TAG = "MyService";
     private final String CHANNEL_ID = "mainChannel";
 
     private DatabaseHelper db;
@@ -73,30 +72,28 @@ public class MqttService extends Service {
         mqttHelper.connect(new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
-                Toast.makeText(mqttHelper.mContext, "Connected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mqttHelper.mContext, getString(R.string.connection_connected_to) + " " + connectionModel.getUrl(), Toast.LENGTH_SHORT).show();
                 mqttHelper.setDisconnectOptions();
                 connected.setValue("connected");
             }
 
             @Override
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                Toast.makeText(mqttHelper.mContext, getString(R.string.connection_error_connecting_to) + " " + connectionModel.getUrl(), Toast.LENGTH_SHORT).show();
                 Log.w("Failed to connect", exception.toString());
-                Toast.makeText(mqttHelper.mContext, "Failed to connect. Try again later.", Toast.LENGTH_SHORT).show();
                 connected.setValue("failure");
             }
         });
     }
 
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     public MqttHelper getMqttHelper() {

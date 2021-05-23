@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homeassistant.views.DevicesActivity;
 import com.example.homeassistant.R;
-import com.example.homeassistant.SettingsItem;
+import com.example.homeassistant.model.SettingsItem;
 
 public class SettingsRecycleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     private View itemView;

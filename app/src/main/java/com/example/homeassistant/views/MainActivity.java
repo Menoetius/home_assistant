@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.homeassistant.LoadingFragment;
 import com.example.homeassistant.R;
 import com.example.homeassistant.helpers.DatabaseHelper;
 import com.example.homeassistant.helpers.MqttHelper;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper db;
     MainViewModel model;
     MqttService mService;
-    private ConnectingDialog connectingDialog;
+    private WaitingDialog waitingDialog;
     private BrokerAlertDialog brokerAlertDialog;
 
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startService();
+        startMqttService();
     }
 
     @Override
@@ -78,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startService(){
+    private void startMqttService(){
         Intent serviceIntent = new Intent(this, MqttService.class);
         startService(serviceIntent);
 
         bindService();
     }
 
-    private void bindService(){
+    private void bindService() {
         Intent serviceBindIntent =  new Intent(this, MqttService.class);
         bindService(serviceBindIntent, model.getServiceConnection(), Context.BIND_AUTO_CREATE);
     }
@@ -105,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
                             public void onChanged(String connected) {
                                 if (connected.equals("connected")) {
                                     connect();
-//                                    MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
-//                                    mqttHelper.subscribeToTopic("BRQ/BUT/#", 0, MainActivity.this, null, new IMqttMessageListener(){
-//                                        @Override
-//                                        public void messageArrived(String topic, MqttMessage message) throws Exception {
-//                                            Log.i("MESSAGE", "TOPIC: " + topic + " MESSAGE: " + message.toString());
-//                                        }
-//                                    });
+                                    MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
+                                    mqttHelper.subscribeToTopic("BRQ/BUT/#", 0, MainActivity.this, null, new IMqttMessageListener(){
+                                        @Override
+                                        public void messageArrived(String topic, MqttMessage message) throws Exception {
+                                            Log.i("MESSAGE", "TOPIC: " + topic + " MESSAGE: " + message.toString());
+                                        }
+                                    });
 
                                     model.initBrokerData();
 
@@ -150,14 +149,14 @@ public class MainActivity extends AppCompatActivity {
             navHostFragment.getNavController().navigate(R.id.action_loginFragment_to_HomeFragment);
             bottomNav.setVisibility(View.VISIBLE);
         }
-        if (connectingDialog != null) {
-            connectingDialog.dismissDialog();
+        if (waitingDialog != null) {
+            waitingDialog.dismissDialog();
         }
     }
 
     public void connect() {
-        connectingDialog = new ConnectingDialog(MainActivity.this);
-        connectingDialog.startConnectingDialog(getString(R.string.fetching_data_from_server));
+        waitingDialog = new WaitingDialog(MainActivity.this);
+        waitingDialog.startWaitingDialog(getString(R.string.fetching_data_from_server));
     }
 
     @Override

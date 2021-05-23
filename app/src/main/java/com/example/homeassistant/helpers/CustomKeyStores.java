@@ -32,7 +32,7 @@ public class CustomKeyStores extends SSLSocketFactory {
 
         protected ArrayList<X509TrustManager> x509TrustManagers = new ArrayList<X509TrustManager>();
 
-        protected AdditionalKeyStoresTrustManager(KeyStore... additionalkeyStores) {
+        protected AdditionalKeyStoresTrustManager(KeyStore... additionalKeyStores) {
             final ArrayList<TrustManagerFactory> factories = new ArrayList<TrustManagerFactory>();
 
             try {
@@ -40,7 +40,7 @@ public class CustomKeyStores extends SSLSocketFactory {
                 original.init((KeyStore) null);
                 factories.add(original);
 
-                for( KeyStore keyStore : additionalkeyStores ) {
+                for( KeyStore keyStore : additionalKeyStores ) {
                     final TrustManagerFactory additionalCerts = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                     additionalCerts.init(keyStore);
                     factories.add(additionalCerts);
@@ -50,15 +50,17 @@ public class CustomKeyStores extends SSLSocketFactory {
                 throw new RuntimeException(e);
             }
 
-            for (TrustManagerFactory tmf : factories)
-                for( TrustManager tm : tmf.getTrustManagers() )
-                    if (tm instanceof X509TrustManager)
-                        x509TrustManagers.add( (X509TrustManager)tm );
+            for (TrustManagerFactory tmf : factories) {
+                for (TrustManager tm : tmf.getTrustManagers()) {
+                    if (tm instanceof X509TrustManager) {
+                        x509TrustManagers.add((X509TrustManager) tm);
+                    }
+                }
+            }
 
-
-            if( x509TrustManagers.size()==0 )
+            if(x509TrustManagers.size() == 0) {
                 throw new RuntimeException("Couldn't find any X509TrustManagers");
-
+            }
         }
 
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -67,11 +69,11 @@ public class CustomKeyStores extends SSLSocketFactory {
         }
 
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            for( X509TrustManager tm : x509TrustManagers ) {
+            for(X509TrustManager tm : x509TrustManagers) {
                 try {
                     tm.checkServerTrusted(chain,authType);
                     return;
-                } catch( CertificateException e ) {
+                } catch(CertificateException e) {
                 }
             }
             throw new CertificateException();

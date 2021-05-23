@@ -16,7 +16,7 @@
         android:id="@+id/bottom_navigation"
         app:menu="@menu/bottom_navigation"
         android:background="@color/colorLightGrey"
-        app:labelVisibilityMode="unlabeled"
+        app:labelVisibilityMode="labeled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

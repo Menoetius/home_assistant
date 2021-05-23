@@ -61,7 +61,7 @@ public class CameraDevice extends DeviceModel {
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                "image='" + image + '\'' +
+                ", image='" + image + '\'' +
                 ", message='" + message + '\'' +
                 ", timestamp=" + timestamp +
                 '}';

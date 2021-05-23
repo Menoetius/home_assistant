@@ -1,4 +1,4 @@
-package com.example.homeassistant;
+package com.example.homeassistant.model;
 
 public class SettingsItem {
     private int icon;

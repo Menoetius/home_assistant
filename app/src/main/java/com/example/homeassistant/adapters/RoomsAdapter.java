@@ -24,6 +24,7 @@ import com.example.homeassistant.views.RoomsFragmentDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> {
     private ArrayList<Room> rooms;
@@ -32,7 +33,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
     private final RoomDevicesAdapter.OnItemLongClickListener longListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        String[] backgrounds = new String[] {"bg_blue_gradient", "bg_red_gradient", "bg_green_gradient"};
+        String[] backgrounds = new String[] {"bg_blue_gradient", "bg_red_gradient", "bg_green_gradient", "bg_purple_gradient"};
 
         private final TextView tvRoomsName;
         private final RecyclerView rvRoomsDevices;
@@ -61,7 +62,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
 
         public void bind(final Room item, int position) {
             tvRoomsName.setText(item.getName());
-            view.setBackgroundResource(fragment.getResources().getIdentifier("@drawable/" + backgrounds[position % 3], "drawable", fragment.getActivity().getPackageName()));
+            view.setBackgroundResource(fragment.getResources().getIdentifier("@drawable/" + backgrounds[position % 4], "drawable", fragment.getActivity().getPackageName()));
             ibSettings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +99,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.ViewHolder> 
 //        }
 
         private void initRecyclerView(Room item){
-            mAdapter = new RoomDevicesAdapter(item.getDevices(), listener, longListener, fragment);
+            mAdapter = new RoomDevicesAdapter(item.getDevices().stream().filter(device -> !device.getType().equals("sensor")).collect(Collectors.toList()), listener, longListener, fragment);
             rvRoomsDevices.setAdapter(mAdapter);
         }
     }

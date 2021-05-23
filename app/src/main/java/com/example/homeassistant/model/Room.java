@@ -3,7 +3,6 @@ package com.example.homeassistant.model;
 import com.example.homeassistant.devices.CameraDevice;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class Room {

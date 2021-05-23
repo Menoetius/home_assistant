@@ -105,7 +105,7 @@
 
     <fragment
         android:id="@+id/SettingsFragment"
-        android:name="com.example.homeassistant.SettingsFragment"
+        android:name="com.example.homeassistant.views.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
     <fragment

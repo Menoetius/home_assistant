@@ -84,20 +84,20 @@ public class MqttHelper {
         } else {
             try {
                 final TrustManager[] myTrustManager = new TrustManager[]{
-                        new X509TrustManager() {
-                            @Override
-                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                            }
-
-                            @Override
-                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                            }
-
-                            @Override
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return new java.security.cert.X509Certificate[]{};
-                            }
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
                         }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
                 };
 
                 final SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -162,7 +162,7 @@ public class MqttHelper {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
             MqttMessage message = new MqttMessage(encodedPayload);
             message.setQos(qos != null ? qos : 0);
-            Log.w("publish", "topic: " + topic + " message: " + payload);
+            Log.d("publish", "topic: " + topic + " message: " + payload);
             mqttAndroidClient.publish(topic, message);
         } catch (MqttException e) {
             e.printStackTrace();
