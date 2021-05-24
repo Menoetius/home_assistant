@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.model.DeviceModel;
@@ -53,6 +54,14 @@ public class LightFragment extends Fragment {
             }
         });
 
+        ImageButton ibSettings = view.findViewById(R.id.ibSettings);
+        ibSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), getString(R.string.not_implemented), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         TextView tvBrightness = view.findViewById(R.id.tvBrightness);
         TextView tvColor = view.findViewById(R.id.tvColor);
         tvState = view.findViewById(R.id.tvState);
@@ -85,7 +94,7 @@ public class LightFragment extends Fragment {
                 Map<String, String> map = device.getSwitchMessage(!device.isStateOn());
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     mService.getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }
@@ -140,7 +149,7 @@ public class LightFragment extends Fragment {
                 Map<String, String> map = device.getSetMessage("brightness", (int) (slider.getValue()));
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     model.getBinder().getValue().getService().getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }
@@ -156,7 +165,7 @@ public class LightFragment extends Fragment {
                 Map<String, String> map = device.getSetMessage("color", selectedColor);
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     model.getBinder().getValue().getService().getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }

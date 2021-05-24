@@ -1,6 +1,5 @@
 package com.example.homeassistant.model;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 

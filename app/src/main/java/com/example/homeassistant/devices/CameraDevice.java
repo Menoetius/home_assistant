@@ -10,21 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CameraDevice extends DeviceModel {
-
-    private static final String TAG = DevicesRepository.class.getSimpleName();
-
     private String image;
     private String message;
-    private int timestamp;
+    private double timestamp;
 
-    public CameraDevice(String id, String name, String type, String image, String message, int timestamp) {
+    public CameraDevice(String id, String name, String type, String image, String message, double timestamp) {
         super(id, name, type);
         this.image = image;
         this.message = message;
         this.timestamp = timestamp;
     }
 
-    public CameraDevice(String id, String name, String type, String technology, String image, String message, int timestamp) {
+    public CameraDevice(String id, String name, String type, String technology, String image, String message, double timestamp) {
         super(id, name, type, technology);
         this.image = image;
         this.message = message;
@@ -47,11 +44,11 @@ public class CameraDevice extends DeviceModel {
         this.message = message;
     }
 
-    public int getTimestamp() {
+    public double getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(double timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -83,5 +80,41 @@ public class CameraDevice extends DeviceModel {
         map.put("topicIn", "BRQ/BUT/" + id + "/stream/in");
         map.put("topicOut", "BRQ/BUT/" + id + "/stream/out");
         return map;
+    }
+
+    @Override
+    public boolean processMessage(String topic, String message, String actualDevice) {
+        boolean result = false;
+        String attrName = topic.split("/")[3];
+
+        if ("motion_detection".equals(attrName)) {
+            processMotionMessage(message);
+            if (actualDevice.equals("all")) {
+                result = true;
+            }
+        }
+
+        return result;
+    }
+
+    private void processMotionMessage(String message) {
+        try {
+            JSONObject obj = new JSONObject(message);
+            String type = obj.getString("type");
+
+            if ("periodic_report".equals(type)) {
+                if (obj.has("report")) {
+                    JSONObject report = obj.getJSONObject("report");
+
+                    if (report.has("value")) {
+                        if (report.getString("value").equals("motion_detected") && obj.has("timestamp")) {
+                            setTimestamp(obj.getDouble("timestamp"));
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

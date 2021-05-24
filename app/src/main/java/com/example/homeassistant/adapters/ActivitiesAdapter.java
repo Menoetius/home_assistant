@@ -1,12 +1,9 @@
 package com.example.homeassistant.adapters;
 
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,9 +15,9 @@ import com.example.homeassistant.model.Activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
     private final ActivitiesAdapter.OnItemClickListener listener;
@@ -57,7 +54,11 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     }
 
     public ActivitiesAdapter(ArrayList<Activity> dataSet, ActivitiesAdapter.OnItemClickListener listener, Fragment fragment, int limit) {
-        this.activities = dataSet;
+        if (dataSet.isEmpty()) {
+            this.activities = new ArrayList<Activity> (Collections.singletonList(new Activity(System.currentTimeMillis() / 1000, fragment.getString(R.string.no_activities))));;
+        } else {
+            this.activities = dataSet;
+        }
         this.fragment = fragment;
         this.listener = listener;
         this.limit = limit;
@@ -98,6 +99,4 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     public interface OnItemClickListener {
         void onItemClick(Activity item, View view);
     }
-
-
 }

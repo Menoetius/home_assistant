@@ -121,9 +121,9 @@ public class SwitchDevice extends DeviceModel {
     @Override
     public String getFeaturedValue() {
         if (state.equals("on")) {
-            return "On"; //@todo resource
+            return "On";
         } else {
-            return "Off"; //@todo resource
+            return "Off";
         }
     }
 
@@ -171,13 +171,11 @@ public class SwitchDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setTemperature(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setTemperature(value);
             }
 
 
@@ -191,13 +189,11 @@ public class SwitchDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setHumidity(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setHumidity(value);
             }
 
 

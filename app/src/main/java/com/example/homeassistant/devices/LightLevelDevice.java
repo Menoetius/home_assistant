@@ -101,9 +101,9 @@ public class LightLevelDevice extends DeviceModel {
             if (hasBrightness && brightness != 0) {
                 return brightness + "%";
             }
-            return "On"; //@todo resource
+            return "On";
         }
-        return "Off"; //@todo resource
+        return "Off";
     }
 
     @Override
@@ -182,15 +182,13 @@ public class LightLevelDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "color":
-                    JSONObject valueObj = obj.getJSONObject("value");
-                    if (valueObj.has("r") && valueObj.has("g") && valueObj.has("b")) {
-                        int color = Color.rgb((float) valueObj.getInt("r"), (float) valueObj.getInt("g"), (float) valueObj.getInt("b"));
-                        setColor(color);
-                        setState("on");
-                    }
-                    break;
+            if ("color".equals(type)) {
+                JSONObject valueObj = obj.getJSONObject("value");
+                if (valueObj.has("r") && valueObj.has("g") && valueObj.has("b")) {
+                    int color = Color.rgb((float) valueObj.getInt("r"), (float) valueObj.getInt("g"), (float) valueObj.getInt("b"));
+                    setColor(color);
+                    setState("on");
+                }
             }
 
         } catch (JSONException e) {
@@ -203,12 +201,10 @@ public class LightLevelDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "brightness":
-                    int value = obj.getInt("value");
-                    setBrightness(value);
-                    setState("on");
-                    break;
+            if ("brightness".equals(type)) {
+                int value = obj.getInt("value");
+                setBrightness(value);
+                setState("on");
             }
 
 
@@ -222,11 +218,9 @@ public class LightLevelDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "set":
-                    String value = obj.getString("value");
-                    setState(value);
-                    break;
+            if ("set".equals(type)) {
+                String value = obj.getString("value");
+                setState(value);
             }
 
 

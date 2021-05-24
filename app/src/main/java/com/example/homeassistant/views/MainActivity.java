@@ -30,12 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
-//    public Toolbar toolbar;
-    public BottomNavigationView bottomNav;
-    NavHostFragment navHostFragment;
-    DatabaseHelper db;
-    MainViewModel model;
-    MqttService mService;
+    private BottomNavigationView bottomNav;
+    private NavHostFragment navHostFragment;
+    private DatabaseHelper db;
+    private MainViewModel model;
+    private MqttService mService;
     private WaitingDialog waitingDialog;
     private BrokerAlertDialog brokerAlertDialog;
 
@@ -94,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable MqttService.MyBinder myBinder) {
                 if(myBinder == null) {
-                    Log.d(TAG, "onChanged: unbound from service");
+                    Log.d(TAG, "Unbound from service");
                 } else {
-                    Log.d(TAG, "onChanged: bound to service.");
+                    Log.d(TAG, "Bound to service.");
                     mService = myBinder.getService();
                     if (mService != null) {
                         mService.getConnected().observe(MainActivity.this, new Observer<String>() {
@@ -104,13 +103,6 @@ public class MainActivity extends AppCompatActivity {
                             public void onChanged(String connected) {
                                 if (connected.equals("connected")) {
                                     connect();
-                                    MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
-                                    mqttHelper.subscribeToTopic("BRQ/BUT/#", 0, MainActivity.this, null, new IMqttMessageListener(){
-                                        @Override
-                                        public void messageArrived(String topic, MqttMessage message) throws Exception {
-                                            Log.i("MESSAGE", "TOPIC: " + topic + " MESSAGE: " + message.toString());
-                                        }
-                                    });
 
                                     model.initBrokerData();
 
@@ -161,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        bottomNav.setVisibility(View.VISIBLE);
-        super.onBackPressed();
+        if (!(navHostFragment.getChildFragmentManager().getFragments().get(0) instanceof LoginFragment)) {
+            bottomNav.setVisibility(View.VISIBLE);
+            super.onBackPressed();
+        }
     }
 }

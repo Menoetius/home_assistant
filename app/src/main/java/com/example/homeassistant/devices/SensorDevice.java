@@ -70,12 +70,12 @@ public class SensorDevice extends DeviceModel {
 
     @Override
     public String getFeaturedValue() {
-        return "ma tu byt senzor?"; //@todo nie je iste ci sa ma zobrazovat v zozname devicov roomky
+        return "";
     }
 
     @Override
     public boolean isStateOn() {
-        return false; // @todo nie je jasne
+        return false;
     }
 
     @Override
@@ -112,16 +112,12 @@ public class SensorDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setTemperature(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setTemperature(value);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -132,16 +128,12 @@ public class SensorDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setHumidity(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setHumidity(value);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

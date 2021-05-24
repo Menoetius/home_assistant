@@ -97,17 +97,15 @@
         android:label="SecurityFragment"
         tools:layout="@layout/fragment_security" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/TemperatureFragment"-->
-<!--        android:name="com.example.homeassistant.TemperatureFragment"-->
-<!--        android:label="TemperatureFragment"-->
-<!--        tools:layout="@layout/fragment_temperature" />-->
-
     <fragment
         android:id="@+id/SettingsFragment"
         android:name="com.example.homeassistant.views.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_SettingsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editRoomFragment"
         android:name="com.example.homeassistant.views.EditRoomFragment"

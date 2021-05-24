@@ -32,6 +32,7 @@ public class MqttService extends Service {
 
     private DatabaseHelper db;
 
+    private NotificationManager notificationManager;
     private ConnectionModel connectionModel;
     private MqttHelper mqttHelper;
     private final IBinder mBinder = new MyBinder();
@@ -92,7 +93,7 @@ public class MqttService extends Service {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
 
@@ -104,15 +105,19 @@ public class MqttService extends Service {
         return connected;
     }
 
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
+    }
+
     public void pushNotification(String title, String message, String fragmentName) {
-        NotificationManager mNotificationManager =
+        notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     getString(R.string.channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(getString(R.string.channel_description));
-            mNotificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -122,7 +127,7 @@ public class MqttService extends Service {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(pi);
-        mNotificationManager.notify(0, mBuilder.build());
+        notificationManager.notify(0, mBuilder.build());
     }
 
     @Override

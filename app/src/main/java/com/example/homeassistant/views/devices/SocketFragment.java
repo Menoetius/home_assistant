@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.adapters.SocketParametersAdapter;
@@ -50,6 +51,14 @@ public class SocketFragment extends Fragment {
             }
         });
 
+        ImageButton ibSettings = view.findViewById(R.id.ibSettings);
+        ibSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), getString(R.string.not_implemented), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         tvState = view.findViewById(R.id.tvState);
         ivState = view.findViewById(R.id.ivState);
 
@@ -67,7 +76,7 @@ public class SocketFragment extends Fragment {
                 Map<String, String> map = device.getSwitchMessage(!device.isStateOn());
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     mService.getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }

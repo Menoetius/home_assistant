@@ -27,10 +27,6 @@ import com.example.homeassistant.viewmodels.MainViewModel;
 
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class RoomsFragment extends Fragment {
     private RecyclerView rvRoom;
     private MainViewModel model;
@@ -73,7 +69,7 @@ public class RoomsFragment extends Fragment {
                 Map<String, String> map = item.getSwitchMessage(!item.isStateOn());
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     ViewModelProviders.of(getActivity()).get(MainViewModel.class).getBinder().getValue().getService().getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }

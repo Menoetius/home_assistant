@@ -71,9 +71,10 @@ public class CustomKeyStores extends SSLSocketFactory {
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
             for(X509TrustManager tm : x509TrustManagers) {
                 try {
-                    tm.checkServerTrusted(chain,authType);
+                    tm.checkServerTrusted(chain, authType);
                     return;
-                } catch(CertificateException e) {
+                } catch (CertificateException e) {
+                    // trust's everything so no error needed
                 }
             }
             throw new CertificateException();

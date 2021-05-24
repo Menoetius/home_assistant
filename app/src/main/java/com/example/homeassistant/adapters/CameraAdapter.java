@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -14,15 +15,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.homeassistant.R;
 import com.example.homeassistant.devices.CameraDevice;
 import com.example.homeassistant.helpers.GlideSignature;
+import com.example.homeassistant.model.Activity;
 
 import java.util.ArrayList;
 
 
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder> {
-    private final ArrayList<CameraDevice> deviceModels;
+    private ArrayList<CameraDevice> deviceModels;
     private final OnItemClickListener listener;
+    private final Fragment fragment;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final int HALF_HOUR_IN_SECONDS = 1800;
+
         private final TextView roomName;
         private final ImageView roomImage;
         private final TextView movement;
@@ -35,7 +40,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
             movement = view.findViewById(R.id.tvSecurityName);
         }
 
-        public void bind(final CameraDevice item, final OnItemClickListener listener) {
+        public void bind(final CameraDevice item, final OnItemClickListener listener, Fragment fragment) {
             roomName.setText(item.getName());
             Glide.with(itemView.getContext())
                     .load(item.getImage())
@@ -47,7 +52,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
                                     .override(100))
                     .signature(new GlideSignature((int) System.currentTimeMillis() / 10000))
                     .into(roomImage);
-            movement.setText(item.getMessage());
+            movement.setText((System.currentTimeMillis() / 1000) - item.getTimestamp() > HALF_HOUR_IN_SECONDS ? fragment.getString(R.string.no_motion) : fragment.getString(R.string.motion_detected));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item, v);
@@ -56,9 +61,14 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
         }
     }
 
-    public CameraAdapter(ArrayList<CameraDevice> dataSet, OnItemClickListener listener) {
+    public CameraAdapter(ArrayList<CameraDevice> dataSet, OnItemClickListener listener, Fragment fragment) {
         deviceModels = dataSet;
         this.listener = listener;
+        this.fragment = fragment;
+    }
+
+    public void setDataSet(ArrayList<CameraDevice> data) {
+        this.deviceModels = data;
     }
 
     @NonNull
@@ -72,7 +82,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.bind(deviceModels.get(position), listener);
+        viewHolder.bind(deviceModels.get(position), listener, fragment);
     }
 
     @Override

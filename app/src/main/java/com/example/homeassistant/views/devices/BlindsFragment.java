@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.homeassistant.R;
 import com.example.homeassistant.model.DeviceModel;
@@ -23,7 +24,6 @@ import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 
 import java.util.Map;
-
 
 public class BlindsFragment extends Fragment {
     MqttService mService;
@@ -48,6 +48,14 @@ public class BlindsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 BlindsFragment.this.getActivity().onBackPressed();
+            }
+        });
+
+        ImageButton ibSettings = view.findViewById(R.id.ibSettings);
+        ibSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), getString(R.string.not_implemented), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -80,7 +88,7 @@ public class BlindsFragment extends Fragment {
                 Map<String, String> map = device.getSetMessage("position", (int) (100 - slider.getValue()));
 
                 if (map == null) {
-                    Log.w("ERROR", "Device getSetMessage not working"); // @todo error
+                    Log.w("ERROR", "Device getSetMessage not working");
                 } else {
                     model.getBinder().getValue().getService().getMqttHelper().publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }

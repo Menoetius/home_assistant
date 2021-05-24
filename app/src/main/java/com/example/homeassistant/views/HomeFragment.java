@@ -40,12 +40,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
     LinearLayoutManager HorizontalLayout;
     ScenesAdapter scenesAdapter;
     ActivitiesAdapter activitiesAdapter;
+    CameraAdapter cameraAdapter;
     MqttService mService;
     MainViewModel model;
     View view;
@@ -75,10 +77,10 @@ public class HomeFragment extends Fragment {
         activitiesAdapter = new ActivitiesAdapter(data.getActivities(), new ActivitiesAdapter.OnItemClickListener() {
             @Override public void onItemClick(Activity item, View view) {
                 MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
-                mqttHelper.subscribeToTopic("BRQ/BUT/out", 2, getContext(), null, new IMqttMessageListener(){
+                mqttHelper.subscribeToTopic("BRQ/BUT/out", 2,null, new IMqttMessageListener(){
                     @Override
                     public void messageArrived(String topic, MqttMessage message) throws Exception {
-                        model.getBrokerData().getValue().addActivities(JsonHelper.parseActivities(message.toString()));
+                        model.getBrokerData().getValue().setActivities(JsonHelper.parseActivities(message.toString()));
                         if (model.getActualDevice().getValue().equals("activities")) {
                             model.setRefresh(model.getRefresh().getValue() + 1);
                         }
@@ -103,7 +105,7 @@ public class HomeFragment extends Fragment {
         model.getRefresh().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer data) {
-                if (activitiesAdapter != null) {
+                if (activitiesAdapter != null && !model.getBrokerData().getValue().getActivities().isEmpty()) {
                     activitiesAdapter.setDataSet(model.getBrokerData().getValue().getActivities());
                     activitiesAdapter.notifyDataSetChanged();
                 }
@@ -123,7 +125,7 @@ public class HomeFragment extends Fragment {
                 model.getBrokerData().getValue().setActiveScene(item.getId());
                 scenesAdapter.notifyDataSetChanged();
             }
-        },this);
+        },HomeFragment.this);
         sceneRecyclerView.setAdapter(scenesAdapter);
     }
 
@@ -133,15 +135,15 @@ public class HomeFragment extends Fragment {
         roomRecyclerView.setClickable(true);
         HorizontalLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         roomRecyclerView.setLayoutManager(HorizontalLayout);
-        roomRecyclerView.setAdapter(new CameraAdapter(camerasDataSet, new CameraAdapter.OnItemClickListener() {
+        cameraAdapter = new CameraAdapter(camerasDataSet, new CameraAdapter.OnItemClickListener() {
             @Override public void onItemClick(final CameraDevice item, View view) {
                 Map<String, String> map = item.getStream();
 
                 if (map == null) {
-                    Log.w("ERROR", "Stream not working"); // @todo error
+                    Log.w("ERROR", getString(R.string.not_implemented));
                 } else {
                     MqttHelper mqttHelper = model.getBinder().getValue().getService().getMqttHelper();
-                    mqttHelper.subscribeToTopic(map.get("topicOut"), 2, getContext(), null, new IMqttMessageListener(){
+                    mqttHelper.subscribeToTopic(map.get("topicOut"), 2, null, new IMqttMessageListener(){
                         @Override
                         public void messageArrived(String topic, MqttMessage message) throws Exception {
                             HomeFragmentDirections.ActionHomeFragmentToFullscreenCameraFragment action =
@@ -152,6 +154,7 @@ public class HomeFragment extends Fragment {
                     mqttHelper.publishToTopic(map.get("topicIn"), map.get("message"), 2);
                 }
             }
-        }));
+        }, HomeFragment.this);
+        roomRecyclerView.setAdapter(cameraAdapter);
     }
 }

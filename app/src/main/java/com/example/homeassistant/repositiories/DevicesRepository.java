@@ -1,6 +1,5 @@
 package com.example.homeassistant.repositiories;
 
-
 import com.example.homeassistant.helpers.MqttHelper;
 import com.example.homeassistant.model.DeviceModel;
 import com.example.homeassistant.viewmodels.MainViewModel;
@@ -33,7 +32,7 @@ public class DevicesRepository {
         MqttHelper mqttHelper = mModel.getBinder().getValue().getService().getMqttHelper();
 
         for (DeviceModel device : devices) {
-            mqttHelper.subscribeToTopic("BRQ/BUT/"+device.getId()+"/+/out", 0, null, null, new IMqttMessageListener() {
+            mqttHelper.subscribeToTopic("BRQ/BUT/"+device.getId()+"/+/out", 0, null, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     DeviceModel device = mModel.getBrokerData().getValue().getDeviceById(topic.split("/")[2]);

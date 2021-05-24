@@ -1,8 +1,5 @@
 package com.example.homeassistant.devices;
 
-import android.content.res.Resources;
-import android.util.Log;
-
 import com.example.homeassistant.model.DeviceModel;
 import com.example.homeassistant.repositiories.DevicesRepository;
 
@@ -13,9 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BlindsDevice extends DeviceModel {
-
-    private static final String TAG = DevicesRepository.class.getSimpleName();
-
     private int position;
 
     public BlindsDevice(String id, String name, String type, int position) {
@@ -25,10 +19,6 @@ public class BlindsDevice extends DeviceModel {
 
     public BlindsDevice(String id, String name, String type, String technology, int position) {
         super(id, name, type, technology);
-        this.position = position;
-    }
-
-    public BlindsDevice(int position) {
         this.position = position;
     }
 
@@ -53,9 +43,9 @@ public class BlindsDevice extends DeviceModel {
     @Override
     public String getFeaturedValue() {
         if (position == 0) {
-            return "Down";//@todo resource Resources.getSystem().getString(android.R.string.blinds_down);
+            return "Down";
         } else if (position == 100) {
-            return "Up";//@todo resource Resources.getSystem().getString(android.R.string.blinds_up);
+            return "Up";
         }
         return position + "%";
     }
@@ -93,13 +83,11 @@ public class BlindsDevice extends DeviceModel {
         boolean result = false;
         String attrName = topic.split("/")[3];
 
-        switch(attrName) {
-            case "position":
-                processPositionMessage(message);
-                if (actualDevice.equals("all")) {
-                    result = true;
-                }
-                break;
+        if ("position".equals(attrName)) {
+            processPositionMessage(message);
+            if (actualDevice.equals("all")) {
+                result = true;
+            }
         }
 
         if (actualDevice.equals(getId())) {
@@ -114,11 +102,9 @@ public class BlindsDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "command_response":
-                    int value = obj.getInt("value");
-                    setPosition(value);
-                    break;
+            if ("command_response".equals(type)) {
+                int value = obj.getInt("value");
+                setPosition(value);
             }
         } catch (JSONException e) {
             e.printStackTrace();

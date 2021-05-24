@@ -34,9 +34,8 @@ public class LoginFragment extends Fragment {
     MainViewModel model;
 
     public LoginFragment() {
-        // Required empty public constructor
-    }
 
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

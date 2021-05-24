@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_ID, roomModel.getRoom_id());
+        values.put(ROOM_ID, roomModel.getRoomId());
         values.put(ROOM_NAME, roomModel.getName());
         values.put(BACKGROUND, roomModel.getBackgroundImage());
 
@@ -82,11 +82,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_ID, roomModel.getRoom_id());
+        values.put(ROOM_ID, roomModel.getRoomId());
         values.put(ROOM_NAME, roomModel.getName());
         values.put(BACKGROUND, roomModel.getBackgroundImage());
 
-        long insert = db.update(ROOM_TABLE, values, ROOM_ID + " = ?", new String[] {roomModel.getRoom_id()});
+        long insert = db.update(ROOM_TABLE, values, ROOM_ID + " = ?", new String[] {roomModel.getRoomId()});
 
         return insert != -1;
     }

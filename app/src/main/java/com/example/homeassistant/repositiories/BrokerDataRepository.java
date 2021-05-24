@@ -51,13 +51,12 @@ public class BrokerDataRepository {
 
     public void setBrokerData() {
         final MqttHelper mqttHelper = mModel.getBinder().getValue().getService().getMqttHelper();
-        mqttHelper.subscribeToTopic("BRQ/BUT/devices/out", 0, null, null, new IMqttMessageListener() {
+        mqttHelper.subscribeToTopic("BRQ/BUT/devices/out", 0, null, new IMqttMessageListener() {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 if (topic.equals("BRQ/BUT/devices/out")) {
                     String messageString = message.toString();
                     try {
-                        Log.i("BROKER DATA", messageString);
                         BrokerData data = JsonHelper.brokerData(messageString);
                         if (activities != null) {
                             data.setActivities(getActivities());
@@ -65,19 +64,18 @@ public class BrokerDataRepository {
                         brokerData.postValue(data);
                         mqttHelper.unSubscribe("BRQ/BUT/devices/out");
                     } catch (Exception e){
-                        Log.w("ERROR", e); //@todo nedostal som data od brokeru daj nejaku peknu hlasku
+                        e.printStackTrace();
                     }
                 }
             }
         });
 
-        mqttHelper.subscribeToTopic("BRQ/BUT/activities/out", 0, null, null, new IMqttMessageListener() {
+        mqttHelper.subscribeToTopic("BRQ/BUT/activities/out", 0, null, new IMqttMessageListener() {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 if (topic.equals("BRQ/BUT/activities/out")) {
                     String messageString = message.toString();
                     try {
-                        Log.i("ACTIVITIES", messageString);
                         if (brokerData.getValue() != null) {
                             brokerData.getValue().setActivities(JsonHelper.parseActivities(messageString));
                         } else {
@@ -116,7 +114,7 @@ public class BrokerDataRepository {
 
         mqttHelper.publishToTopic("BRQ/BUT/in", obj2.toString(), 1);
 
-        mqttHelper.subscribeToTopic("BRQ/BUT/events/in", 0, null, null, new IMqttMessageListener() {
+        mqttHelper.subscribeToTopic("BRQ/BUT/events/in", 0, null, new IMqttMessageListener() {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 if (topic.equals("BRQ/BUT/events/in")) {

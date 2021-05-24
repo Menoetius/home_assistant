@@ -49,7 +49,7 @@ public class ScenesAdapter extends RecyclerView.Adapter<ScenesAdapter.ViewHolder
     }
 
     public ScenesAdapter(ArrayList<Scene> dataSet, ScenesAdapter.OnItemClickListener listener, Fragment fragment) {
-        scenes = dataSet;
+        this.scenes = dataSet;
         this.fragment = fragment;
         this.listener = listener;
     }

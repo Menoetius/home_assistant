@@ -31,11 +31,13 @@ import javax.net.ssl.X509TrustManager;
 
 
 public class MqttHelper {
+
+    public static final String TAG = "MqttHelper";
+
     public MqttAndroidClient mqttAndroidClient;
     public final Context mContext;
     private DatabaseHelper db;
     private ConnectionModel connectionModel;
-
     final String deviceId = MqttClient.generateClientId();
 
     /**
@@ -116,15 +118,14 @@ public class MqttHelper {
     }
 
     /**
-     *
-     * @param topic
-     * @param qos
-     * @param context
-     * @param actionListener
-     * @param messageListener
+     * Subscribes to provided topic with given parameters
+     * @param topic - String topic name
+     * @param qos - Integer QoS [0, 1, 2]
+     * @param actionListener - information on success/failure from server
+     * @param messageListener - message callback listener
      */
-    public void subscribeToTopic(String topic, Integer qos, Context context, IMqttActionListener actionListener, IMqttMessageListener messageListener) {
-        if (actionListener == null) { // todo toto pri service nebude fungovat
+    public void subscribeToTopic(String topic, Integer qos, IMqttActionListener actionListener, IMqttMessageListener messageListener) {
+        if (actionListener == null) {
             actionListener = new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
@@ -151,10 +152,10 @@ public class MqttHelper {
     }
 
     /**
-     *
-     * @param topic
-     * @param payload
-     * @param qos
+     * Publish given message to given topic
+     * @param topic - String topic name
+     * @param payload - String payload of message - in MQTT2GO should be json format
+     * @param qos - Integer QoS [0, 1, 2]
      */
     public void publishToTopic(String topic, String payload, Integer qos) {
         byte[] encodedPayload;
@@ -162,7 +163,6 @@ public class MqttHelper {
             encodedPayload = payload.getBytes(StandardCharsets.UTF_8);
             MqttMessage message = new MqttMessage(encodedPayload);
             message.setQos(qos != null ? qos : 0);
-            Log.d("publish", "topic: " + topic + " message: " + payload);
             mqttAndroidClient.publish(topic, message);
         } catch (MqttException e) {
             e.printStackTrace();
@@ -174,7 +174,7 @@ public class MqttHelper {
     }
 
     /**
-     *
+     * Sets options for unexpected disconnect from server
      */
     public void setDisconnectOptions() {
         DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
@@ -186,8 +186,8 @@ public class MqttHelper {
     }
 
     /**
-     *
-     * @param topic
+     * Unsubscribe form topic
+     * @param topic - string topic name
      */
     public void unSubscribe(String topic) {
         try {
@@ -199,10 +199,21 @@ public class MqttHelper {
 
     /**
      *
-     * @param connectionModel
-     * @return
+     * @param connectionModel - object containing connection information
+     * @return returns URL address with port number based on connection model
      */
     private String buildServerUri(ConnectionModel connectionModel) {
         return "ssl://" + connectionModel.getUrl() + ":" + connectionModel.getPort();
+    }
+
+    /**
+     * Disconnect from server
+     */
+    public void disconnect() {
+        try {
+            mqttAndroidClient.disconnect();
+        } catch (MqttException err) {
+            Log.d(TAG, err.getMessage());
+        }
     }
 }

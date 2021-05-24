@@ -33,7 +33,6 @@ public class JsonHelper {
 
     static public BrokerData brokerData(String jsonString) throws JSONException {
         JSONObject obj = new JSONObject(jsonString);
-//        int timestamp = Integer.parseInt(obj.getString("timestamp"));
         int timestamp = 0;
 
         String type = obj.getString("type");
@@ -62,7 +61,7 @@ public class JsonHelper {
                         roomName = device.getString("name");
                         String image = device.has("image") ? device.getString("image") : "";
                         String message = device.has("events") ? device.getJSONObject("events").getString("message") : "";
-                        int timestamp = device.has("events") ? parseInt(device.getJSONObject("events").getString("timestamp")) : 0;
+                        double timestamp = device.has("events") ? parseDouble(device.getJSONObject("events").getString("timestamp")) : 0;
 
                         camera = new CameraDevice(deviceId, deviceName, deviceType, technology, image, message, timestamp);
                         break;

@@ -1,12 +1,8 @@
 package com.example.homeassistant.model;
 
-import android.util.Log;
-
 import com.example.homeassistant.devices.CameraDevice;
-import com.example.homeassistant.model.Room;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -123,6 +119,7 @@ public class BrokerData {
             Room room = entry.getValue();
 
             devices.addAll(room.getDevices());
+            devices.add(room.getCamera());
         }
 
         return devices;
@@ -136,6 +133,10 @@ public class BrokerData {
                 if (device.getId().equals(id)) {
                     return device;
                 }
+            }
+
+            if (room.getCamera().getId().equals(id)) {
+                return room.getCamera();
             }
         }
 

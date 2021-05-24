@@ -14,14 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.homeassistant.R;
-import com.example.homeassistant.adapters.ActivitiesAdapter;
 import com.example.homeassistant.adapters.AlertsAdapter;
-import com.example.homeassistant.adapters.ScenesAdapter;
 import com.example.homeassistant.adapters.SecurityAdapter;
-import com.example.homeassistant.adapters.SocketParametersAdapter;
 import com.example.homeassistant.helpers.DividerItemDecorator;
 import com.example.homeassistant.model.BrokerData;
-import com.example.homeassistant.model.Scene;
 import com.example.homeassistant.model.Security;
 import com.example.homeassistant.services.MqttService;
 import com.example.homeassistant.viewmodels.MainViewModel;

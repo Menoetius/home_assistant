@@ -1,30 +1,16 @@
 package com.example.homeassistant.devices;
 
-import android.nfc.Tag;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.homeassistant.R;
-import com.example.homeassistant.adapters.SocketParametersAdapter;
 import com.example.homeassistant.model.DeviceModel;
-import com.example.homeassistant.model.Scene;
 import com.example.homeassistant.repositiories.DevicesRepository;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class SocketDevice extends DeviceModel {
 
@@ -217,9 +203,9 @@ public class SocketDevice extends DeviceModel {
     @Override
     public String getFeaturedValue() {
         if (state.equals("on")) {
-            return "On"; //@todo resource
+            return "On";
         } else {
-            return "Off"; //@todo resource
+            return "Off";
         }
     }
 
@@ -282,13 +268,11 @@ public class SocketDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setVoltage(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setVoltage(value);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -300,13 +284,11 @@ public class SocketDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setCurrent(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setCurrent(value);
             }
 
 
@@ -320,13 +302,11 @@ public class SocketDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setConsumption(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setConsumption(value);
             }
 
 
@@ -340,15 +320,12 @@ public class SocketDevice extends DeviceModel {
             JSONObject obj = new JSONObject(message);
             String type = obj.getString("type");
 
-            switch (type) {
-                case "periodic_report":
-                    JSONObject report = obj.getJSONObject("report");
-                    double value = report.getDouble("value");
-                    String unit = report.getString("unit");
-                    setConsumption(value);
-                    break;
+            if ("periodic_report".equals(type)) {
+                JSONObject report = obj.getJSONObject("report");
+                double value = report.getDouble("value");
+                String unit = report.getString("unit");
+                setConsumption(value);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -367,7 +344,6 @@ public class SocketDevice extends DeviceModel {
                     setState(value);
                     break;
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -8,7 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.homeassistant.R;
+import com.example.homeassistant.viewmodels.MainViewModel;
 
 public class BrokerAlertDialog {
 
@@ -36,6 +40,7 @@ public class BrokerAlertDialog {
             @Override
             public void onClick(View v) {
                 dismissDialog();
+                ViewModelProviders.of((FragmentActivity) activity).get(MainViewModel.class).getBinder().getValue().getService().getNotificationManager().cancelAll();
             }
         });
 
